@@ -14,7 +14,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:5000/api/tmdb", // 👈 now pointing to your own backend
+  baseURL: "https://movieappreact-nkbd.onrender.com/api/tmdb", // 👈 now pointing to your own backend
 });
 
 export default instance;
