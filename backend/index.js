@@ -31,10 +31,15 @@ app.get("/api/tmdb/popular", async (req, res) => {
 
 // Get movie details
 // backend/index.js
-app.get("/api/tmdb/trending/:type/day", async (req, res) => {
-  const { type } = req.params;
+app.get("/api/tmdb/trending/:type/:time", async (req, res) => {
+  const { type, time } = req.params; // type = movie/tv/all, time = day/week
+
+  if (!["day", "week"].includes(time)) {
+    return res.status(400).json({ error: "Invalid time window" });
+  }
+
   try {
-    const response = await TMDB.get(`/trending/${type}/day`);
+    const response = await TMDB.get(`/trending/${type}/${time}`);
     res.json(response.data);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch trending content" });
@@ -83,6 +88,102 @@ app.get("/api/tmdb/person/popular", async (req, res) => {
   } catch (err) {
     console.error("People fetch error:", err.message);
     res.status(500).json({ error: "Failed to fetch popular people" });
+  }
+});
+
+app.get("/api/tmdb/person/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [detail, externalid, combinedCredits] = await Promise.all([
+      TMDB.get(`/person/${id}`),
+      TMDB.get(`/person/${id}/external_ids`),
+      TMDB.get(`/person/${id}/combined_credits`),
+    ]);
+
+    res.status(200).json({
+      detail: detail.data,
+      externalid: externalid.data,
+      combinedCredits: combinedCredits.data,
+    });
+  } catch (err) {
+    console.error("Error fetching person detail:", err.message);
+    res.status(500).json({ error: "Failed to fetch person details" });
+  }
+});
+
+app.get("/api/tmdb/movie/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [detail, externalid, recommendations, similar] = await Promise.all([
+      TMDB.get(`/movie/${id}`),
+      TMDB.get(`/movie/${id}/external_ids`),
+      TMDB.get(`/movie/${id}/recommendations`),
+      TMDB.get(`/movie/${id}/similar`),
+    ]);
+
+    res.status(200).json({
+      detail: detail.data,
+      externalid: externalid.data,
+      recommendations: recommendations.data,
+      similar: similar.data,
+    });
+  } catch (error) {
+    console.error("Error fetching movie details:", error.message);
+    res.status(500).json({ error: "Failed to fetch movie data" });
+  }
+});
+
+app.get("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Fetch details
+    const [detail, externalid, recommendations, similar] = await Promise.all([
+      axios.get(
+        `https://api.themoviedb.org/3/tv/${id}?api_key=${TMDB_API_KEY}&language=en-US`
+      ),
+      axios.get(
+        `https://api.themoviedb.org/3/tv/${id}/external_ids?api_key=${TMDB_API_KEY}`
+      ),
+      axios.get(
+        `https://api.themoviedb.org/3/tv/${id}/recommendations?api_key=${TMDB_API_KEY}&language=en-US&page=1`
+      ),
+      axios.get(
+        `https://api.themoviedb.org/3/tv/${id}/similar?api_key=${TMDB_API_KEY}&language=en-US&page=1`
+      ),
+    ]);
+
+    res.status(200).json({
+      detail: detail.data,
+      externalid: externalid.data,
+      recommendations: recommendations.data,
+      similar: similar.data,
+    });
+  } catch (error) {
+    console.error("Error fetching TV details:", error.message);
+    res.status(500).json({ error: "Failed to fetch TV details" });
+  }
+});
+
+app.get("/api/tmdb/search/multi", async (req, res) => {
+  const { query } = req.query;
+
+  if (!query || query.trim() === "") {
+    return res.status(400).json({ error: "Query parameter is required" });
+  }
+
+  try {
+    const response = await TMDB.get(`/search/multi`, {
+      params: {
+        query,
+      },
+    });
+    res.json(response.data);
+  } catch (err) {
+    console.error("TMDB search error:", err.message);
+    res.status(500).json({ error: "Failed to fetch search results" });
   }
 });
 
