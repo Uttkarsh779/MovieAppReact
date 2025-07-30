@@ -12,6 +12,8 @@ import TvDetails from "./Components/TvDetails";
 import PeopleDetails from "./Components/PeopleDetails";
 import Trailer from "./Components/Partials/Trailer";
 import Error from "./Components/Partials/Error";
+import About from "./Components/About";
+import Contact from "./Components/Contact";
 
 const App = () => {
   return (
@@ -31,6 +33,9 @@ const App = () => {
         </Route>
         <Route path="/People" element={<People />} />
         <Route path="/People/details/:id" element={<PeopleDetails />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+
         <Route path="*" element={<Error />} />
       </Routes>
     </div>
