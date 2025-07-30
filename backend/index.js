@@ -363,6 +363,10 @@ app.get("/api/tmdb/search/multi", async (req, res) => {
   }
 });
 
+app.get("*", async (req, res) => {
+  res.send("Error.jsx");
+});
+
 // You can add more routes like trending, people, tv shows etc.
 
 const PORT = process.env.PORT || 5000;

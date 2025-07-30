@@ -1,64 +1,44 @@
-import React, { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
-import Dropdown from "./Dropdown";
+import React from "react";
+import { Link } from "react-router-dom";
 
 const HorizontalCards = ({ data }) => {
-  const Shorten = (overview, x) => {
-    return overview.slice(0, x);
-  };
+  const Shorten = (overview, x) => overview?.slice(0, x) || "";
+
   return (
     data && (
-      <div className="h-[42vh] w-full pt-0 p-5 mb-15">
-        {/* {console.log(data)} */}
-
-        <div className="flex gap-3 w-full h-full overflow-hidden overflow-x-auto pb-2 mb-5">
-          {data.map((data, index) => (
+      <div className="w-full p-4">
+        <div className="flex gap-4 overflow-x-auto pb-3 scroll-smooth">
+          {data.map((item, index) => (
             <Link
-              to={`/${data.media_type}/details/${data.id}`}
+              to={`/${item.media_type}/details/${item.id}`}
               key={index}
-              className="max-w-[25vh] min-w-[25vh] h-full bg-zinc-900"
+              className="flex-shrink-0 bg-zinc-900 rounded-md shadow-md w-[18vh] sm:w-[22vh] md:w-[25vh]"
             >
               <img
-                className="w-full h-[50%] shadow-sm"
+                className="w-full h-[30%] sm:h-[40%] md:h-[50%] object-cover rounded-t-md"
                 src={
-                  data.backdrop_path || data.profile_path
+                  item.backdrop_path || item.profile_path
                     ? `https://image.tmdb.org/t/p/original/${
-                        data.backdrop_path || data.profile_path
+                        item.backdrop_path || item.profile_path
                       }`
-                    : "public/images/no_image.avif"
+                    : "/images/no_image.avif"
                 }
                 alt="img"
               />
-              <h1 className=" text-2xl p-1 text-white font-semibold ">
+              <h1 className="text-sm sm:text-base text-white font-semibold px-2 pt-1 truncate">
                 {Shorten(
-                  data.title ||
-                    data.original_title ||
-                    data.name ||
-                    data.original_name,
-                  11
+                  item.title ||
+                    item.original_title ||
+                    item.name ||
+                    item.original_name,
+                  25
                 )}
               </h1>
-              <p className="p-1 text-sm text-white ">
-                {Shorten(data.overview, 50)}
-                {/* {data.overview} */}
-                {/* <NavLink
-                to={`/${data.media_type}/details/${data.id}`}
-                className="text-zinc-400"
-              >
-                ...more
-              </NavLink> */}
+              <p className="text-xs sm:text-sm text-white px-2 pb-2 line-clamp-2">
+                {Shorten(item.overview, 60)}
               </p>
             </Link>
           ))}
-
-          {/* <div className="max-w-[25vh] h-full bg-red-200 ">
-          <img className="w-full h-[50%] shadow-sm" src="#" alt="img" />
-          <h1 className="text-3xl">Movie Title</h1>
-          <p className=" p-2">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eligendi,
-            sunt.
-          </p>
-        </div> */}
         </div>
       </div>
     )

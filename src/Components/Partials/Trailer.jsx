@@ -7,7 +7,7 @@ const Trailer = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const category = pathname.includes("movie") ? "Movie" : "Tv";
-  console.log(category);
+  // console.log(category);
 
   const ytvideo = useSelector((state) => state[category].info.videos);
 
@@ -19,7 +19,7 @@ const Trailer = () => {
 
   // console.log(category);
 
-  console.log("Trailer key:", trailer[0]?.key);
+  // console.log("Trailer key:", trailer[0]?.key);
 
   return (
     trailer && (

@@ -13,17 +13,17 @@ const Cards = ({ cardData, title }) => {
           className="w-full sm:w-[45%] md:w-[30%] lg:w-[20%] mt-4"
         >
           <img
-            className="w-full h-[40vh] object-cover shadow-lg rounded"
+            className="w-full h-[30vh] sm:h-[35vh] md:h-[40vh] object-cover shadow-lg rounded"
             src={
               data.backdrop_path || data.profile_path
                 ? `https://image.tmdb.org/t/p/original/${
                     data.backdrop_path || data.profile_path
                   }`
-                : "public/images/no_image.avif"
+                : "/images/no_image.avif"
             }
             alt="img"
           />
-          <h1 className="text-lg sm:text-xl text-zinc-300 mt-2 text-center font-semibold">
+          <h1 className="text-sm sm:text-base md:text-lg text-zinc-300 mt-2 text-center font-semibold">
             {data.title ||
               data.original_title ||
               data.name ||
