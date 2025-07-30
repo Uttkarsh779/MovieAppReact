@@ -82,6 +82,82 @@
 
 // export default Home;
 
+//home 2
+
+// import React, { useEffect, useState } from "react";
+// import Sidenav from "./Partials/Sidenav";
+// import Topnav from "./Partials/Topnav";
+// import Header from "./Partials/Header";
+// import HorizontalCards from "./Partials/HorizontalCards";
+// import Dropdown from "./Partials/Dropdown";
+// import Loading from "./Loading";
+// import axios from "../utils/axios";
+
+// document.title = "UTFlex | Homepage";
+
+// const Home = () => {
+//   const [Wallpaper, setWallpaper] = useState(null);
+//   const [Trending, setTrending] = useState([]);
+//   const [Category, setCategory] = useState("all");
+
+//   const GetWallpaper = async () => {
+//     try {
+//       const { data } = await axios.get(`/trending/${Category}/day`);
+//       const randomItem =
+//         data.results[Math.floor(Math.random() * data.results.length)];
+//       setWallpaper(randomItem);
+//     } catch (error) {
+//       console.error("Error fetching wallpaper:", error);
+//     }
+//   };
+
+//   const GetTrending = async () => {
+//     try {
+//       const { data } = await axios.get(`/trending/${Category}/day`);
+//       setTrending(data.results);
+//     } catch (error) {
+//       console.error("Error fetching trending data:", error);
+//     }
+//   };
+
+//   useEffect(() => {
+//     GetTrending();
+//     GetWallpaper();
+//   }, [Category]);
+
+//   if (!Wallpaper || Trending.length === 0) return <Loading />;
+
+//   return (
+//     <>
+//       <div className="w-[25vw] p-2">
+//         <Sidenav />
+//       </div>
+
+//       <div className="w-screen h-full overflow-hidden overflow-y-auto mx-[1%]">
+//         <Topnav />
+//         <Header data={Wallpaper} />
+
+//         <div className="flex justify-between mx-[1%]">
+//           <h1 className="py-5 text-zinc-400 font-semibold text-3xl">
+//             Trending
+//           </h1>
+//           <div className="text-white py-5">
+//             <Dropdown
+//               title="filter"
+//               options={["tv", "movie", "all"]}
+//               func={(e) => setCategory(e.target.value)}
+//             />
+//           </div>
+//         </div>
+
+//         <HorizontalCards data={Trending} />
+//       </div>
+//     </>
+//   );
+// };
+
+// export default Home;
+
 import React, { useEffect, useState } from "react";
 import Sidenav from "./Partials/Sidenav";
 import Topnav from "./Partials/Topnav";
@@ -126,16 +202,18 @@ const Home = () => {
   if (!Wallpaper || Trending.length === 0) return <Loading />;
 
   return (
-    <>
-      <div className="w-[25vw] p-2">
+    <div className="flex w-full h-screen overflow-hidden">
+      {/* Sidenav visible on medium screens and above */}
+      <div className="hidden md:block w-[20%]">
         <Sidenav />
       </div>
 
-      <div className="w-screen h-full overflow-hidden overflow-y-auto mx-[1%]">
+      {/* Main Content Area */}
+      <div className="w-full md:w-[80%] h-full overflow-y-auto">
+        <Sidenav /> {/* This will render only the toggle button on mobile */}
         <Topnav />
         <Header data={Wallpaper} />
-
-        <div className="flex justify-between mx-[1%]">
+        <div className="flex justify-between items-center px-4">
           <h1 className="py-5 text-zinc-400 font-semibold text-3xl">
             Trending
           </h1>
@@ -147,10 +225,9 @@ const Home = () => {
             />
           </div>
         </div>
-
         <HorizontalCards data={Trending} />
       </div>
-    </>
+    </div>
   );
 };
 

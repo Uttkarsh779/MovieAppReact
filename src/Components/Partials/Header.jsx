@@ -5,7 +5,7 @@ const Header = ({ data }) => {
   return (
     data && (
       <div
-        className="w-full h-[53vh] flex flex-col justify-end rounded bg-cover bg-center"
+        className="w-full h-[35vh] sm:h-[45vh] md:h-[53vh] flex flex-col justify-end rounded bg-cover bg-center"
         style={{
           backgroundImage: `linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.5),rgba(0,0,0,.8)),url(https://image.tmdb.org/t/p/original/${
             data.backdrop_path || data.profile_path
