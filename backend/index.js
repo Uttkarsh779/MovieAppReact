@@ -41,6 +41,22 @@ app.get("/api/tmdb/trending/:type/day", async (req, res) => {
   }
 });
 
+// Get movies by category like now_playing, popular, top_rated, upcoming
+app.get("/api/tmdb/movie/:category", async (req, res) => {
+  const { category } = req.params;
+  const { page, language } = req.query;
+
+  try {
+    const response = await TMDB.get(`/movie/${category}`, {
+      params: { page, language },
+    });
+    res.json(response.data);
+  } catch (err) {
+    console.error("Movie fetch error:", err.message);
+    res.status(500).json({ error: "Failed to fetch movies by category" });
+  }
+});
+
 // You can add more routes like trending, people, tv shows etc.
 
 const PORT = process.env.PORT || 5000;
