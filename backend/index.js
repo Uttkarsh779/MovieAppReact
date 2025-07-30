@@ -57,6 +57,35 @@ app.get("/api/tmdb/movie/:category", async (req, res) => {
   }
 });
 
+app.get("/api/tmdb/tv/:category", async (req, res) => {
+  const { category } = req.params;
+  const { page, language } = req.query;
+
+  try {
+    const response = await TMDB.get(`/tv/${category}`, {
+      params: { page, language },
+    });
+    res.json(response.data);
+  } catch (err) {
+    console.error("TV Shows fetch error:", err.message);
+    res.status(500).json({ error: "Failed to fetch TV shows by category" });
+  }
+});
+
+app.get("/api/tmdb/person/popular", async (req, res) => {
+  const { page, language } = req.query;
+
+  try {
+    const response = await TMDB.get("/person/popular", {
+      params: { page, language },
+    });
+    res.json(response.data);
+  } catch (err) {
+    console.error("People fetch error:", err.message);
+    res.status(500).json({ error: "Failed to fetch popular people" });
+  }
+});
+
 // You can add more routes like trending, people, tv shows etc.
 
 const PORT = process.env.PORT || 5000;
